@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "UniCareer-Test": {
+      "applicationId": "QpxDqToLzwWPLnOrOBnJzUIJ6uXc29b4lJIiXBPV"
+    },
+    "_default": {
+      "link": "UniCareer-Test"
+    }
+  }
+}
