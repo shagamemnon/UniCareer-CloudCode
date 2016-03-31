@@ -1,8 +1,51 @@
+//Stripe Test SecretKey
 
-// Use Parse.Cloud.define to define as many cloud functions as you want.
-// For example:
-Parse.Cloud.define("hello", function(request, response) {
-  response.success("Hello world!");
+var Stripe = require('stripe')
+
+Stripe.initialize('sk_test_ePDSBK4YqUagVl3dkjzjpDt1');
+
+var stripeSecretKey = 'sk_test_ePDSBK4YqUagVl3dkjzjpDt1';
+var stripeBaseURL = 'api.stripe.com/v1';
+
+Parse.Cloud.define("saveStripeCustomerIdAndCharge", function (request, response) {
+        Stripe.Customers.create({
+        card: request.params.token,
+   	description: request.params.desc,
+   	email: request.params.email
+        }, {
+                success: function(customer) {
+ 
+                            var User = request.user;
+                            User.set("stripe_customer_id",customer.id );
+                            User.save(null, {
+                                success: function(customer){
+ 
+               response.success("Customer saved to parse = " + User.get("email"));
+                                },
+                                error: function(customer, error) {
+                response.error("Failed to save customer id to parse");
+                                }
+ 
+                            });
+ 
+                },
+                error: function(httpResponse) {
+                        response.error("Error");
+                }
+        }).then(function(customer){
+    return Stripe.Charges.create({
+      amount: request.params.amount, 
+      currency: "usd",
+      customer: customer.id
+    },{
+    success: function(results) {
+      response.success(results);
+    },
+    error: function(httpResponse) {
+      response.error(httpResponse);
+    }
+});
+});
 });
 
 
