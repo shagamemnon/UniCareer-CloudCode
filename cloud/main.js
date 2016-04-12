@@ -14,7 +14,7 @@ Parse.Cloud.define("saveStripeCustomerIdAndCharge", function (request, response)
                 success: function(customer) {
  
                             var User = request.user;
-                            User.set("stripeCustomerId",customer.id );
+                            User.set("stripe_customer_id",customer.id );
                             User.save(null, {
                                 success: function(customer){
  
