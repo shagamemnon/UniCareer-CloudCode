@@ -46,6 +46,22 @@ Parse.Cloud.define("saveStripeCustomerIdAndCharge", function (request, response)
     });
 });
 
+Parse.Cloud.define("stripeChargeCustomer", function(request, response) {
+      Stripe.Charges.create({
+      amount: request.params.amount,
+      currency: "usd",
+      customer: request.params.customerId
+    },{
+    success: function(results) {
+      response.success(results);
+    },
+    error: function(httpResponse) {
+      response.error(httpResponse);
+    }
+ 
+});
+});
+
 Parse.Cloud.define("stripeDeleteCard", function (request, response) {
     Parse.Cloud.httpRequest({
         method: "DELETE",
