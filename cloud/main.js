@@ -124,6 +124,13 @@ Parse.Cloud.define("stripeAddCardToCustomer", function(request, response)
      
 });
 
+Parse.Cloud.define("addRating", function(request, response)
+{
+                   var user = request.params.get("user")
+                   var rating = request.params.get("rating")
+                   response.error("test function some object from request = " + user " " + rating)
+});
+
 /*
 Parse.Cloud.beforeSave("Experience", function(request, response){
 
