@@ -50,7 +50,8 @@ Parse.Cloud.define("stripeChargeCustomer", function(request, response) {
       Stripe.Charges.create({
       amount: request.params.amount,
       currency: "usd",
-      customer: request.params.customerId
+      customer: request.params.customerId,
+      description: request.params.description
     },{
     success: function(results) {
       response.success(results);
