@@ -8,7 +8,7 @@ var stripeBaseURL = 'api.stripe.com/v1';
 Parse.Cloud.define("saveStripeCustomerIdAndCharge", function (request, response) {
     Stripe.Customers.create({
         card: request.params.token,
-        description: request.params.desc,
+        description: request.params.description,
         email: request.params.email
     }, {
         success: function (customer) {
@@ -66,7 +66,7 @@ Parse.Cloud.define("stripeChargeCustomer", function(request, response) {
 Parse.Cloud.define("stripeDeleteCard", function (request, response) {
     Parse.Cloud.httpRequest({
         method: "DELETE",
-        url: "https://" + stripeSecretKey + ':@' + stripeBaseUrl + "/customers/" + request.params.customerId + "/sources/" + request.params.cardId,
+        url: "https://" + stripeSecretKey + ':@' + stripeBaseURL + "/customers/" + request.params.customerId + "/sources/" + request.params.cardId,
         // body: "id="+request.params.cardId,
         success: function (cards) {
             console.log(JSON.stringify(cards));
