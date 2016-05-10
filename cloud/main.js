@@ -113,7 +113,7 @@ Parse.Cloud.define("stripeGetDefaultCard", function (request, response) {
 Parse.Cloud.define("stripeAddCardToCustomer", function (request, response) {
     Parse.Cloud.httpRequest({
         method: "POST",
-        url: "https://" + stripeSecretKey + ':@' + stripeBaseUrl + "/customers/" + request.params.customerId + "/cards",
+        url: "https://" + stripeSecretKey + ':@' + stripeBaseURL + "/customers/" + request.params.customerId + "/cards",
         body: "card=" + request.params.tokenId,
 
         //check for duplicate fingerPrintIds
