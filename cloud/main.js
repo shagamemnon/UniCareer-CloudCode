@@ -110,10 +110,23 @@ Parse.Cloud.define("stripeGetDefaultCard", function (request, response) {
 
 });
 
+Parse.Cloud.define("stripeCheckDuplicateToken", function (request, response) {
+    Parse.Cloud.httpRequest({
+        url: "https://" + stripeSecretKey + ':@' + stripeBaseURL + "/tokens/" + request.params.tokenId,
+        success: function (card) {
+            console.log(JSON.stringify(card));
+	    response.success(card);
+        },
+        error: function (httpResponse) {
+            response.error('Request failed with response code ' + httpResponse.status);
+        }
+    });
+});
+
 Parse.Cloud.define("stripeAddCardToCustomer", function (request, response) {
     Parse.Cloud.httpRequest({
         method: "POST",
-        url: "https://" + stripeSecretKey + ':@' + stripeBaseURL + "/customers/" + request.params.customerId + "/cards",
+        url: "https://" + stripeSecretKey + ':@' + stripeBaseURL + "/customers/" + request.params.customerId + "/sources",
         body: "card=" + request.params.tokenId,
 
         //check for duplicate fingerPrintIds
