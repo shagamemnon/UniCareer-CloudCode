@@ -210,6 +210,11 @@ Parse.Cloud.define("addRating", function (request, response) {
                 });
                 medianRating = medianRating / ratings.length;
                 user.set("medianRating", medianRating);
+                var points = user.get('points');
+                if (points == null) {
+                    points = 0
+                }
+                user.set('points', points + rating * 10);
                 user.save(null, {
                     success: function (results) {
                         response.success(medianRating);
