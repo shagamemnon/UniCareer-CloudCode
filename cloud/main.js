@@ -46,6 +46,46 @@ Parse.Cloud.define("saveStripeCustomerIdAndCharge", function (request, response)
     });
 });
 
+Parse.Cloud.define("stripeSaveExistingCustomerCardAndCharge", function (request, response) {
+     Parse.Cloud.httpRequest({
+        method: "POST",
+        url: "https://" + stripeSecretKey + ':@' + stripeBaseURL + "/customers/" + request.params.customerId + "/sources",
+        body: "card=" + request.params.tokenId,
+
+        //check for duplicate fingerPrintIds
+        success: function (httpResponse) {
+            var jsonObj = JSON.parse(httpResponse.text)
+            var jsonResult = (jsonObj['fingerprint']);
+            console.log("New fingerprint:" + jsonObj['fingerprint']);
+            console.log(httpResponse.text);
+            var cardResponse = {
+
+                "fingerPrint": jsonResult,
+            };
+
+            response.success(cardResponse);
+            //response.success(httpResponse.text);
+
+        },
+        error: function (httpResponse) {
+            response.error('Request failed with response code ' + httpResponse.status);
+        }
+    }).then(function (httpResponse) {
+        return Stripe.Charges.create({
+            amount: request.params.amount,
+            currency: "usd",
+            customer: customer.id
+        }, {
+            success: function (results) {
+                response.success(results);
+            },
+            error: function (httpResponse) {
+                response.error(httpResponse);
+            }
+        });
+    });
+});
+
 Parse.Cloud.define("stripeChargeCustomer", function(request, response) {
       Stripe.Charges.create({
       amount: request.params.amount,
